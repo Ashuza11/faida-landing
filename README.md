@@ -33,20 +33,21 @@ Clone the repository:
 
 ```Bash
 git clone [https://github.com/your-username/faida-landing-page.git](https://github.com/your-username/faida-landing-page.git)
-Open the project: Simply open index.html in any modern web browser.
 ```
 
-> Tailwind CSS: The project uses the Play CDN for Tailwind CSS, so no build step is required for basic viewing.
+- Open the project: Simply open index.html in any modern web browser.
+
+- Tailwind CSS: The project uses the Play CDN for Tailwind CSS, so no build step is required for basic viewing.
 
 ## 📱 Responsiveness
 
 This landing page is fully responsive, featuring:
 
-A mobile-friendly sticky navigation menu with a hamburger toggle.
+- A mobile-friendly sticky navigation menu with a hamburger toggle.
 
-Adaptive grid layouts for features and pricing sections.
+- Adaptive grid layouts for features and pricing sections.
 
-Optimized typography and spacing for all screen sizes.
+- Optimized typography and spacing for all screen sizes.
 
 ## 📄 License
 
