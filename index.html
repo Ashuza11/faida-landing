@@ -4,407 +4,832 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Favicon -->
-    <link rel="icon" href="/imgs/favicon.ico" type="image/x-icon">
-    <title>Faida-App</title>
+    <link rel="icon" href="./imgs/favicon.ico" type="image/x-icon">
+    <title>Faida App - Gérez votre capital télécom en RDC</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --faida-blue: #5E72E4;
+            --faida-orange: #F58320;
+            --faida-dark: #1a1a2e;
+        }
+
+        * {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        .bg-faida-blue {
-            background-color: #5E72E4;
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
         }
 
-        .text-faida-orange {
-            color: #F58320;
+        /* Custom colors */
+        .bg-faida-blue { background-color: var(--faida-blue); }
+        .text-faida-blue { color: var(--faida-blue); }
+        .bg-faida-orange { background-color: var(--faida-orange); }
+        .text-faida-orange { color: var(--faida-orange); }
+        .border-faida-blue { border-color: var(--faida-blue); }
+        .border-faida-orange { border-color: var(--faida-orange); }
+
+        .feature-card.blue-border:hover {
+            border-color: rgba(94, 114, 228, 0.3);
         }
 
-        .bg-faida-orange {
-            background-color: #F58320;
+        .feature-card.orange-border:hover {
+            border-color: rgba(245, 131, 32, 0.3);
+        }
+
+        .feature-card.green-border:hover {
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--faida-blue) 0%, var(--faida-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(94, 114, 228, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(94, 114, 228, 0.6); }
+        }
+
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slide-in-left {
+            from { opacity: 0; transform: translateX(-40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slide-in-right {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce-subtle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-3deg); }
+            75% { transform: rotate(3deg); }
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+        .animate-slide-up { animation: slide-up 0.8s ease-out forwards; }
+        .animate-slide-in-left { animation: slide-in-left 0.8s ease-out forwards; }
+        .animate-slide-in-right { animation: slide-in-right 0.8s ease-out forwards; }
+        .animate-fade-in { animation: fade-in 1s ease-out forwards; }
+        .animate-bounce-subtle { animation: bounce-subtle 2s ease-in-out infinite; }
+        .animate-wiggle { animation: wiggle 1s ease-in-out infinite; }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+
+        /* Sticky WhatsApp Button */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+        }
+
+        .whatsapp-btn .pulse-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: #25D366;
+            animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+        }
+
+        .whatsapp-btn .main-btn {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .whatsapp-btn .main-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 32px rgba(37, 211, 102, 0.5);
+        }
+
+        .whatsapp-popup {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 320px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-popup.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Glassmorphism cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Gradient borders */
+        .gradient-border {
+            position: relative;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, var(--faida-blue), var(--faida-orange)) border-box;
+            border: 2px solid transparent;
+        }
+
+        /* Logo hover effect */
+        .logo-hover {
+            transition: all 0.3s ease;
+            filter: grayscale(100%) opacity(0.6);
+        }
+
+        .logo-hover:hover {
+            filter: grayscale(0%) opacity(1);
+            transform: scale(1.1);
+        }
+
+        /* Video container styling */
+        .video-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(94, 114, 228, 0.1) 0%, rgba(245, 131, 32, 0.1) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Feature card hover - FIXED */
+        .feature-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Feature card icon - FIXED: icon stays visible on hover */
+        .feature-card .feature-icon {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+        }
+
+        .feature-card:hover .feature-icon svg {
+            color: white;
+        }
+
+        .feature-card:hover .feature-icon.blue-icon {
+            background-color: var(--faida-blue);
+        }
+
+        .feature-card:hover .feature-icon.orange-icon {
+            background-color: var(--faida-orange);
+        }
+
+        .feature-card:hover .feature-icon.green-icon {
+            background-color: #22c55e;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--faida-blue), var(--faida-orange));
+            border-radius: 4px;
+        }
+
+        /* Initial states for scroll animations */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* FIXED: Outlined button text visibility on hover */
+        .btn-outline-blue {
+            border: 2px solid var(--faida-blue);
+            color: var(--faida-blue);
+            background-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-blue:hover {
+            background-color: var(--faida-blue);
+            color: white !important;
+        }
+
+        .btn-outline-blue:hover * {
+            color: white !important;
+        }
+
+        .btn-outline-dark {
+            border: 2px solid #1f2937;
+            color: #1f2937;
+            background-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-dark:hover {
+            background-color: #1f2937;
+            color: white !important;
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
 
-    <nav class="sticky top-0 w-full z-50 bg-white shadow-sm border-b border-gray-100">
+<body class="bg-white text-gray-900 overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100/50 transition-all duration-300" id="navbar">
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-center h-20">
-
-                <a href="#" class="flex items-center">
-                    <img src="./imgs/logo-outlined.png" alt="Logo Faida App" class="h-10 w-auto">
+                <a href="#" class="flex items-center group">
+                    <img src="./imgs/logo-outlined.png" alt="Logo Faida App" class="h-10 w-auto transition-transform group-hover:scale-105">
                 </a>
 
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#constat"
-                        class="text-gray-700 hover:text-[#5E72E4] font-medium transition-colors">Avantages</a>
-                    <a href="#features"
-                        class="text-gray-700 hover:text-[#5E72E4] font-medium transition-colors">Fonctionnalités</a>
-                    <a href="#innovation"
-                        class="text-gray-700 hover:text-[#5E72E4] font-medium transition-colors">Innovation</a>
-                    <a href="#pricing"
-                        class="text-gray-700 hover:text-[#5E72E4] font-medium transition-colors">Tarifs</a>
+                    <a href="#probleme" class="text-gray-600 hover:text-faida-blue font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-faida-blue after:transition-all hover:after:w-full">Avantages</a>
+                    <a href="#features" class="text-gray-600 hover:text-faida-blue font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-faida-blue after:transition-all hover:after:w-full">Fonctionnalités</a>
+                    <a href="#innovation" class="text-gray-600 hover:text-faida-blue font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-faida-blue after:transition-all hover:after:w-full">Innovation IA</a>
+                    <a href="#pricing" class="text-gray-600 hover:text-faida-blue font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-faida-blue after:transition-all hover:after:w-full">Tarifs</a>
 
-                    <button
-                        class="bg-[#F58320] text-white px-7 py-2.5 rounded-full font-bold shadow-lg shadow-[#F58320]/20 hover:scale-105 active:scale-95 transition-all">
+                    <a href="https://wa.me/243970353087?text=Bonjour%2C%20je%20souhaite%20commencer%20avec%20Faida%20App" class="bg-faida-orange text-white px-7 py-2.5 rounded-full font-bold shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30 hover:scale-105 active:scale-95 transition-all duration-300">
                         Anza sasa
-                    </button>
+                    </a>
                 </div>
 
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-button" class="text-gray-700 focus:outline-none">
-                        <svg id="burger-icon" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16m-7 6h7" />
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        <svg id="burger-icon" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                         </svg>
-                        <svg id="close-icon" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 hidden" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
+                        <svg id="close-icon" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div id="mobile-menu"
-            class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full left-0 shadow-xl">
-            <div class="px-6 py-8 flex flex-col space-y-6">
-                <a href="#constat" class="mobile-link text-xl font-semibold text-gray-800">Avantages</a>
-                <a href="#features" class="mobile-link text-xl font-semibold text-gray-800">Fonctionnalités</a>
-                <a href="#innovation" class="mobile-link text-xl font-semibold text-gray-800">Innovation</a>
-                <a href="#pricing" class="mobile-link text-xl font-semibold text-gray-800">Tarifs</a>
-                <button class="w-full bg-[#F58320] text-white py-4 rounded-2xl font-bold text-lg shadow-lg">
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 absolute w-full shadow-2xl">
+            <div class="px-6 py-8 flex flex-col space-y-5">
+                <a href="#probleme" class="mobile-link text-lg font-semibold text-gray-800 py-2 border-b border-gray-100">Avantages</a>
+                <a href="#features" class="mobile-link text-lg font-semibold text-gray-800 py-2 border-b border-gray-100">Fonctionnalités</a>
+                <a href="#innovation" class="mobile-link text-lg font-semibold text-gray-800 py-2 border-b border-gray-100">Innovation IA</a>
+                <a href="#pricing" class="mobile-link text-lg font-semibold text-gray-800 py-2 border-b border-gray-100">Tarifs</a>
+                <a href="https://wa.me/243970353087?text=Bonjour%2C%20je%20souhaite%20commencer%20avec%20Faida%20App" class="w-full bg-faida-orange text-white py-4 rounded-2xl font-bold text-lg shadow-lg mt-4 text-center block">
                     Anza sasa
-                </button>
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero section -->
-    <section class="relative overflow-hidden bg-white pt-12 pb-24 md:pt-18 md:pb-28 lg:pt-18 lg:pb-18">
-        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-[#5E72E4] opacity-[0.03] rounded-full blur-3xl">
-        </div>
+    <!-- ============================================ -->
+    <!-- SECTION 1: HERO - Cleaner, More Impactful -->
+    <!-- ============================================ -->
+    <section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        <!-- Background elements -->
+        <div class="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-blue-50/30"></div>
+        <div class="absolute top-20 right-0 w-[600px] h-[600px] bg-faida-blue/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-faida-orange/5 rounded-full blur-3xl"></div>
+        
+        <!-- Floating shapes -->
+        <div class="absolute top-40 left-20 w-4 h-4 bg-faida-blue rounded-full animate-float opacity-40"></div>
+        <div class="absolute top-60 right-25 w-3 h-3 bg-faida-orange rounded-full animate-float delay-200 opacity-40"></div>
+        <div class="absolute bottom-40 left-1/4 w-2 h-2 bg-faida-blue rounded-full animate-float delay-400 opacity-30"></div>
 
-        <div class="container mx-auto px-6 relative">
-            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-
-                <div class="w-full lg:w-3/5 text-left">
-                    <span
-                        class="inline-block px-4 py-1.5 mb-6 text-sm font-semibold tracking-wide text-[#5E72E4] uppercase bg-[#5E72E4]/10 rounded-full">
-                        Solution Grossiste RDC
-                    </span>
-
-                    <h1 class="text-4xl md:text-5xl xl:text-6xl font-extrabold text-gray-900 leading-[1.1] mb-6">
-                        Ne perdez plus jamais un seul franc de votre
-                        <span class="text-[#5E72E4] block md:inline">capital airtime</span>.
-                    </h1>
-
-                    <p class="max-w-2xl text-lg md:text-xl text-gray-600 mb-10 leading-relaxed">
-                        La solution de gestion intelligente pour les grossistes télécoms en RDC.
-                        Suivez vos stocks, vos dettes et vos ventes en temps réel.
-                        <span class="block mt-4 font-semibold text-[#5E72E4] border-l-4 border-[#F58320] pl-4">
-                            Conçue spécifiquement pour les entrepreneurs de Goma et Bukavu.
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                
+                <!-- Left Content -->
+                <div class="w-full lg:w-1/2 text-center lg:text-left">
+                    <!-- Badge -->
+                    <div class="animate-slide-up opacity-0 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-faida-blue/10 text-faida-blue text-sm font-semibold mb-8">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-faida-blue opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-faida-blue"></span>
                         </span>
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                        <button
-                            class="bg-[#F58320] text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-[#F58320]/30 hover:shadow-xl hover:bg-[#e67610] transition-all transform hover:-translate-y-1 text-center">
-                            Commencer mon essai gratuit.
-                        </button>
-
-                        <button
-                            class="border-2 border-[#5E72E4] text-[#5E72E4] px-8 py-4 rounded-xl font-bold text-lg hover:bg-[#5E72E4] hover:text-white transition-all text-center flex items-center justify-center gap-2">
-                            <span>Contacter un agent</span>
-                            <span class="text-xs bg-[#5E72E4]/10 px-2 py-1 rounded">WhatsApp</span>
-                        </button>
+                        Solution #1 pour Grossistes RDC
                     </div>
 
-                    <div class="mt-8 flex items-center gap-3 text-gray-500">
-                        <div class="flex -space-x-2">
-                            <div class="w-8 h-8 rounded-full bg-gray-200 border-2 border-white">
-                                <img src="./imgs/user1.png" alt="Utilisateur 1"
-                                    class="w-full h-full object-cover rounded-full">
-                            </div>
-                            <div class="w-8 h-8 rounded-full bg-gray-300 border-2 border-white">
-                                <img src="./imgs/user2.png" alt="Utilisateur 2"
-                                    class="w-full h-full object-cover rounded-full">
-                            </div>
-                            <div class="w-8 h-8 rounded-full bg-gray-400 border-2 border-white">
-                                <img src="./imgs/user3.png" alt="Utilisateur 3"
-                                    class="w-full h-full object-cover rounded-full">
-                            </div>
+                    <!-- Main Headline -->
+                    <h1 class="animate-slide-up opacity-0 delay-100 font-display text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-[1.1] mb-6">
+                        Ne perdez plus
+                        <span class="gradient-text"> un seul franc</span>
+                        de votre capital.
+                    </h1>
+
+                    <!-- Subtitle -->
+                    <p class="animate-slide-up opacity-0 delay-200 text-lg md:text-xl text-gray-600 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        Pilotez vos stocks <strong class="text-gray-800">Airtel, Orange, Vodacom & Africell</strong> en temps réel. 
+                        Atteignez vos targets opérateurs avec l'IA prédictive.
+                    </p>
+
+                    <!-- CTA Buttons - FIXED: Only one main CTA, all go to WhatsApp -->
+
+                    <div class="animate-slide-up opacity-0 delay-300 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-10">
+                        
+                        <a href="https://wa.me/243979322112?text=..." class="group w-full sm:w-auto flex-shrink-0 whitespace-nowrap bg-orange-500 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2">
+                            <span>Digitaliser mon business</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </a>
+
+                        <a href="https://wa.me/243979322112?text=..." class="btn-outline-blue w-full sm:w-auto flex-shrink-0 whitespace-nowrap px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                            </svg>
+                            </svg>
+                            <span>Contacter un agent</span>
+                        </a>
+                    </div>
+
+                    <!-- Trust indicators -->
+                    <div class="animate-slide-up opacity-0 delay-400 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 text-sm text-gray-500">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>Essai gratuit 14 jours</span>
                         </div>
-                        <p class="text-sm italic italic">Disponible sur Web et Mobile.</p>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>Web & Mobile</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="w-full lg:w-2/5 relative">
-                    <div class="relative z-10 w-full">
-                        <img src="./imgs/image 10.png" [cite_start]alt="Entrepreneur à Goma utilisant Faida App"
-                            class="rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-8 border-white object-cover aspect-[4/5] lg:aspect-auto">
-
-                        <div
-                            class="absolute -bottom-6 -left-6 bg-white p-2 rounded-2xl shadow-xl flex items-center gap-4 animate-bounce-slow">
-                            <div
-                                class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-2xl">
-                                ✓</div>
-                            <div>
-                                <p class="text-xs text-gray-500 font-bold uppercase">Ventes</p>
-                                <p class="font-extrabold text-gray-900">Mises à jour.</p>
-                            </div>
-                        </div>
-                        <div
-                            class="absolute -top-6 -right-6 bg-white p-2 rounded-2xl shadow-xl flex items-center gap-4 animate-bounce-slow">
-                            <div
-                                class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-2xl">
-                                ✓</div>
-                            <div>
-                                <p class="text-xs text-gray-500 font-bold uppercase">Stock</p>
-                                <p class="font-extrabold text-gray-900">Suivie en temps réel.</p>
-                            </div>
+                <!-- Right Content - MacBook Mockup with Video (FIXED: autoplay, no controls) -->
+                <div class="w-full lg:w-1/2 relative animate-slide-in-right opacity-0 delay-300">
+                    <div class="relative">
+                    <!-- MacBook Frame -->
+                    <div class="relative mx-auto" style="max-width: 600px;">
+                        <!-- MacBook image - z-20 to keep frame on top -->
+                        <img src="./imgs/Device-Macbook-Pro.png" alt="Faida App Dashboard" class="w-full relative z-10 pointer-events-none">
+                        
+                        <!-- Video positioned precisely inside screen area -->
+                        <div class="absolute z-20 overflow-hidden bg-gray-800" style="top: 4%; left: 11%; right: 11%; bottom: 16%; border-radius: 3px;">
+                            <video 
+                                autoplay 
+                                muted 
+                                loop 
+                                playsinline
+                                class="w-full h-full object-fill"
+                            >
+                                <source src="./imgs/Faida-demo.mp4" type="video/mp4">
+                            </video>
                         </div>
                     </div>
 
-                    <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-[#F58320] opacity-10 rounded-full blur-2xl">
+                        <!-- Floating cards -->
+                        <div class="absolute -left-8 top-1/4 glass-card p-4 rounded-2xl shadow-xl animate-float hidden lg:flex items-center gap-3">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-semibold">Ventes</p>
+                                <p class="font-bold text-gray-900">+24% ce mois</p>
+                            </div>
+                        </div>
+
+                        <div class="absolute -right-4 bottom-1/3 glass-card p-4 rounded-2xl shadow-xl animate-float delay-300 hidden lg:flex items-center gap-3">
+                            <div class="w-12 h-12 bg-faida-blue/10 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-faida-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-semibold">Stock</p>
+                                <p class="font-bold text-gray-900">Synchronisé</p>
+                            </div>
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Operator Logos -->
+            <div class="mt-16 lg:mt-24 text-center scroll-animate">
+                <p class="text-sm text-gray-400 uppercase tracking-widest mb-8 font-semibold">Gérez tous vos réseaux</p>
+                <div class="flex flex-wrap items-center justify-center gap-8 md:gap-16">
+                    <img src="./imgs/airtel.png" alt="Airtel" class="h-10 md:h-12 logo-hover">
+                    <img src="./imgs/vodacom.png" alt="Vodacom" class="h-10 md:h-12 logo-hover">
+                    <img src="./imgs/orange.png" alt="Orange" class="h-10 md:h-12 logo-hover">
+                    <img src="./imgs/africell.png" alt="Africell" class="h-10 md:h-12 logo-hover">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Constat section -->
-    <section id="constat" class="py-24 bg-gray-50">
-        <div class="container mx-auto px-6">
+    <!-- ============================================ -->
+    <!-- SECTION 2: PROBLÈME -->
+    <!-- ============================================ -->
+    <section id="probleme" class="py-24 bg-gray-50 relative overflow-hidden">
+        <!-- Background pattern -->
+        <!-- Replace the broken SVG background with this -->
+        <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(circle, #5E72E4 1px, transparent 1px); background-size: 24px 24px;"></div>
 
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6">
-                    Marre des erreurs de calcul et des nuits blanches ?
+        <div class="container mx-auto px-6 relative">
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16 scroll-animate">
+                <span class="inline-block px-4 py-2 rounded-full bg-red-100 text-red-600 text-sm font-bold mb-6">
+                    ⚠️ Le Problème
+                </span>
+                <h2 class="font-display text-3xl md:text-5xl font-extrabold text-gray-900 mb-6">
+                    Le carnet ne vous dit pas quand vous 
+                    <span class="text-red-500">perdez de l'argent</span>.
                 </h2>
-                <p class="text-lg text-gray-600 leading-relaxed">
-                    Gérer la vente d'unités et de cartes SIM (<span class="font-bold text-red-600">Airtel</span>, <span
-                        class="font-bold text-blue-600">Vodacom</span>, <span
-                        class="font-bold text-orange-500">Orange</span>, <span
-                        class="font-bold text-yellow-600">Africell</span>) manuellement est un risque permanent.
+                <p class="text-lg text-gray-600">
+                    Nous, si. Voici ce qui détruit silencieusement le capital des grossistes télécom.
                 </p>
             </div>
 
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-
-                <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-red-500">
-                        <h3 class="font-bold text-gray-900 mb-2 italic">"Le chaos des calculs manuels"</h3>
-                        <p class="text-gray-600 text-sm">
-                            Entre les dettes oubliées, les erreurs de stock et le manque de traçabilité, beaucoup de
-                            vendeurs voient leur capital fondre.
-                        </p>
+            <div class="grid lg:grid-cols-2 gap-12 items-stretch">
+                <!-- Problems Cards -->
+                <div class="space-y-6 scroll-animate">
+                    <!-- Problem 1 - FIXED: Better SVG icon -->
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-red-200 transition-all duration-300 group">
+                        <div class="flex items-start gap-5">
+                            <div class="flex-shrink-0 w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <!-- FIXED: Simple money icon that works -->
+                                <svg class="w-7 h-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Hémorragie de Capital</h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    Les erreurs de calcul manuelles grignotent vos marges chaque jour. 
+                                    <span class="font-semibold text-red-500">En moyenne, 15% de pertes invisibles</span> sur le capital annuel.
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-red-500">
-                        <h3 class="font-bold text-gray-900 mb-2 italic">"Des nuits blanches à chercher des erreurs"</h3>
-                        <p class="text-gray-600 text-sm">
-                            Chercher une erreur de caisse de quelques francs peut prendre des heures après une longue
-                            journée de travail.
-                        </p>
+                    <!-- Problem 2 -->
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-red-200 transition-all duration-300 group">
+                        <div class="flex items-start gap-5">
+                            <div class="flex-shrink-0 w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <svg class="w-7 h-7 text-faida-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Le Stress des Targets</h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    Sans visibilité sur vos performances, vous ratez les objectifs opérateurs et 
+                                    <span class="font-semibold text-faida-orange">perdez les bonus et commissions</span>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Problem 3 -->
+                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-red-200 transition-all duration-300 group">
+                        <div class="flex items-start gap-5">
+                            <div class="flex-shrink-0 w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <svg class="w-7 h-7 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Dettes Invisibles</h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    Qui vous doit quoi ? Quand ? Le flou sur les créances transforme votre capital en 
+                                    <span class="font-semibold text-purple-500">argent fantôme qui ne revient jamais</span>.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div
-                    class="bg-[#5E72E4] p-8 md:p-12 rounded-[2.5rem] text-white relative overflow-hidden shadow-2xl shadow-[#5E72E4]/30">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
-
-                    <h3 class="text-2xl md:text-3xl font-bold mb-6 relative z-10">
-                        La promesse AirtFast
-                    </h3>
-
-                    <p class="text-lg text-blue-100 mb-8 leading-relaxed relative z-10">
-                        AirtyFast digitalise tout le processus, de l'achat chez l'opérateur à la revente au petit
-                        vendeur de rue.
-                        Nous transformons ce chaos en un business structuré et rentable.
-                    </p>
-
-                    <ul class="space-y-4 relative z-10">
-                        <li class="flex items-center gap-3">
-                            <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center text-xs">✓
+                   
+                <!-- Solution Card -->
+                <div class="scroll-animate">
+                    <div class="h-full p-10 md:p-12 rounded-[2.5rem] text-white relative overflow-hidden shadow-2xl" style="background: linear-gradient(135deg, #5E72E4 0%, #4338ca 100%); box-shadow: 0 25px 50px -12px rgba(94, 114, 228, 0.3);">     
+                        <!-- Decorative elements -->
+                        <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20"></div>
+                        <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full -ml-16 -mb-16"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 text-white text-sm font-bold mb-8">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                La Solution Faida
                             </div>
-                            <span>Zéro calcul manuel, tout est automatisé.</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center text-xs">✓
-                            </div>
-                            <span>Traçabilité totale de votre capital.</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center text-xs">✓
-                            </div>
-                            <span>Plus de temps pour développer votre réseau.</span>
-                        </li>
-                    </ul>
+
+                            <h3 class="font-display text-3xl md:text-4xl font-bold mb-6 leading-tight">
+                                Transformez le chaos en business structuré
+                            </h3>
+
+                            <p class="text-lg text-blue-100 mb-10 leading-relaxed">
+                                Faida digitalise votre processus de l'achat chez l'opérateur à la revente. 
+                                <strong class="text-white">Zéro calcul manuel, traçabilité totale.</strong>
+                            </p>
+
+                            <ul class="space-y-5">
+                                <li class="flex items-center gap-4">
+                                    <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-lg">Calculs automatiques en temps réel</span>
+                                </li>
+                                <li class="flex items-center gap-4">
+                                    <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-lg">Suivi des dettes par client</span>
+                                </li>
+                                <li class="flex items-center gap-4">
+                                    <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-lg">Rapports journaliers automatisés</span>
+                                </li>
+                                <li class="flex items-center gap-4">
+                                    <div class="w-8 h-8 bg-faida-orange rounded-full flex items-center justify-center flex-shrink-0 animate-pulse">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-lg font-semibold">IA prédictive incluse</span>
+                                </li>
+                            </ul>
+
+                            <a href="https://wa.me/243970353087?text=Bonjour%2C%20je%20souhaite%20protéger%20mon%20capital%20avec%20Faida%20App" class="mt-10 inline-block w-full sm:w-auto bg-white text-faida-blue px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 text-center">
+                                Protéger mon capital →
+                            </a>
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <!-- Fonctionnalités section -->
-    <section id="features" class="py-24 bg-white">
+    <!-- ============================================ -->
+    <!-- SECTION 3: FONCTIONNALITÉS  -->
+    <!-- ============================================ -->
+    <section id="features" class="py-24 bg-white relative">
         <div class="container mx-auto px-6">
-
-            <div class="mb-20">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
-                    Une gestion à 360° de votre <span class="text-[#5E72E4]">Business</span>
+            <!-- Section Header -->
+            <div class="mb-20 scroll-animate">
+                <span class="inline-block px-4 py-2 rounded-full bg-faida-blue/10 text-faida-blue text-sm font-bold mb-6">
+                    Fonctionnalités
+                </span>
+                <h2 class="font-display text-3xl md:text-5xl font-extrabold text-gray-900 mb-4">
+                    Une gestion <span class="gradient-text">360°</span> de votre Business
                 </h2>
-                <div class="w-20 h-1.5 bg-[#F58320] rounded-full"></div>
+                <div class="w-24 h-1.5 bg-gradient-to-r from-faida-blue to-faida-orange rounded-full"></div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-10">
-
-                <div
-                    class="group p-8 rounded-3xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-2xl hover:shadow-[#5E72E4]/10 transition-all duration-300">
-                    <div
-                        class="w-14 h-14 bg-[#5E72E4]/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#5E72E4]" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card blue-border scroll-animate p-8 rounded-3xl border-2 border-gray-100 bg-white">
+                    <div class="feature-icon blue-icon w-16 h-16 bg-faida-blue/10 rounded-2xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-faida-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Balance Journalière</h3>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-4">Tableau de Bord Multi-Réseaux</h3>
                     <p class="text-gray-600 leading-relaxed mb-6">
-                        Visualisez instantanément votre solde initial et vos flux de trésorerie. Ne vous demandez plus
-                        où est passé votre argent en fin de journée.
+                        Centralisez vos flux Airtel, Orange, Vodacom et Africell. Visualisez votre solde et vos mouvements en un coup d'œil.
                     </p>
-                    <ul class="text-sm text-gray-500 space-y-2">
-                        <li class="flex items-center gap-2">• Suivi des entrées/sorties</li>
-                        <li class="flex items-center gap-2">• Rapport automatisé</li>
+                    <ul class="text-sm text-gray-500 space-y-3">
+                        <li class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 bg-faida-blue rounded-full"></span>
+                            Suivi des entrées/sorties
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 bg-faida-blue rounded-full"></span>
+                            Rapport automatisé quotidien
+                        </li>
                     </ul>
                 </div>
 
-                <div
-                    class="group p-8 rounded-3xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-2xl hover:shadow-[#5E72E4]/10 transition-all duration-300">
-                    <div
-                        class="w-14 h-14 bg-[#F58320]/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#F58320]" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <!-- Feature 2 - FIXED: Icon stays visible on hover -->
+                <div class="feature-card orange-border scroll-animate p-8 rounded-3xl border-2 border-gray-100 bg-white">
+                    <div class="feature-icon orange-icon w-16 h-16 bg-faida-orange/10 rounded-2xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-faida-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Dettes & Paiements</h3>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-4">Gestion des Dettes</h3>
                     <p class="text-gray-600 leading-relaxed mb-6">
-                        Une vue claire sur qui vous doit quoi. Automatisez les rappels et sécurisez vos remboursements
-                        pour maintenir un business sain.
+                        Vue claire sur qui vous doit quoi. Automatisez les rappels et sécurisez vos remboursements.
                     </p>
-                    <ul class="text-sm text-gray-500 space-y-2">
-                        <li class="flex items-center gap-2">• Alertes de recouvrement</li>
-                        <li class="flex items-center gap-2">• Historique par client</li>
+                    <ul class="text-sm text-gray-500 space-y-3">
+                        <li class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 bg-faida-orange rounded-full"></span>
+                            Alertes de recouvrement
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 bg-faida-orange rounded-full"></span>
+                            Historique par client
+                        </li>
                     </ul>
                 </div>
 
-                <div
-                    class="group p-8 rounded-3xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-2xl hover:shadow-[#5E72E4]/10 transition-all duration-300">
-                    <div
-                        class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                <!-- Feature 3 -->
+                <div class="feature-card scroll-animate p-8 rounded-3xl border-2 border-gray-100 bg-white hover:border-green-400/30">
+                    <div class="feature-icon green-icon w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Cartographie</h3>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-4">Cartographie Intelligente</h3>
                     <p class="text-gray-600 leading-relaxed mb-6">
-                        Localisez vos points de vente à Goma et Bukavu. Identifiez visuellement les zones à fort
-                        potentiel pour doubler vos ventes.
+                        Visualisez physiquement où circule votre argent. Identifiez les zones à fort potentiel.
                     </p>
-                    <ul class="text-sm text-gray-500 space-y-2">
-                        <li class="flex items-center gap-2">• Géolocalisation des vendeurs</li>
-                        <li class="flex items-center gap-2">• Analyse par quartier</li>
+                    <ul class="text-sm text-gray-500 space-y-3">
+                        <li class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                            Géolocalisation des vendeurs
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                            Analyse par quartier
+                        </li>
                     </ul>
                 </div>
-
             </div>
 
-            <div
-                class="mt-20 p-8 rounded-[2rem] bg-gray-900 text-white flex flex-col md:flex-row items-center justify-between gap-8">
-                <div class="md:w-1/2">
-                    <h4 class="text-2xl font-bold mb-4">Une interface pensée pour la rapidité</h4>
-                    <p class="text-gray-400">Moins de clics, plus de résultats. Faida affiche vos statistiques critiques
-                        en un coup d'œil.</p>
-                </div>
-                <div class="md:w-1/2 grid grid-cols-2 gap-4 w-full">
-                    <div class="bg-white/10 p-4 rounded-xl border border-white/10">
-                        <p class="text-xs text-gray-400 uppercase">Ventes du jour</p>
-                        <p class="text-2xl font-bold text-[#F58320]">80.000 FC</p>
+            <!-- Security Feature -->
+            <div class="mt-12 scroll-animate">
+                <div class="gradient-border p-8 md:p-10 rounded-3xl bg-gray-50/50 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="flex items-center gap-6">
+                        <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-display text-xl font-bold text-gray-900 mb-1">Sécurité Anti-Fraude</h4>
+                            <p class="text-gray-600">Gestion stricte des rôles (Admin vs Stockeurs) pour protéger vos actifs.</p>
+                        </div>
                     </div>
-                    <div class="bg-white/10 p-4 rounded-xl border border-white/10">
-                        <p class="text-xs text-gray-400 uppercase">Dettes récupérées</p>
-                        <p class="text-2xl font-bold text-green-400">150.000 FC</p>
-                    </div>
+                    <a href="https://wa.me/243970353087?text=Bonjour%2C%20je%20souhaite%20en%20savoir%20plus%20sur%20la%20sécurité%20de%20Faida%20App" class="flex-shrink-0 bg-gray-900 text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-800 transition-colors">
+                        En savoir plus
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- L'Innovation IA section -->
-    <section id="innovation" class="py-24 bg-gray-50 overflow-hidden">
-        <div class="container mx-auto px-6">
+    <!-- ============================================ -->
+    <!-- SECTION 4: INNOVATION IA - FIXED: Added icons to all cards -->
+    <!-- ============================================ -->
+    <section id="innovation" class="py-24 bg-gradient-to-b from-gray-50 to-white overflow-hidden relative">
+        <!-- Animated background -->
+        <div class="absolute inset-0">
+            <div class="absolute top-1/4 left-0 w-96 h-96 bg-faida-blue/5 rounded-full blur-3xl animate-float"></div>
+            <div class="absolute bottom-1/4 right-0 w-96 h-96 bg-faida-orange/5 rounded-full blur-3xl animate-float delay-300"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative">
             <div class="flex flex-col-reverse lg:flex-row items-center gap-16">
-
-                <div class="w-full lg:w-1/2 relative">
-                    <div
-                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#5E72E4]/5 rounded-full blur-3xl">
-                    </div>
-
+                <!-- Left - Interactive Cards - FIXED: All cards have visible icons -->
+                <div class="w-full lg:w-1/2 relative scroll-animate">
                     <div class="relative space-y-6">
-                        <div class="group relative z-10 bg-white p-6 rounded-2xl shadow-lg border-l-8 border-[#F58320] 
+                        <!-- AI Card 1 - FIXED: Icon visible -->
+                        <div class="group relative z-10 bg-white p-6 rounded-2xl shadow-xl border-l-4 border-faida-orange 
                                 transform -rotate-2 hover:rotate-0 hover:-translate-y-2 hover:shadow-2xl 
                                 transition-all duration-300 cursor-pointer">
                             <div class="flex items-start gap-4">
-                                <div
-                                    class="flex-shrink-0 w-12 h-12 bg-[#F58320]/10 rounded-xl flex items-center justify-center text-[#F58320] group-hover:scale-110 transition-transform">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                <div class="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-400 rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform shadow-lg">
+                                    <!-- Lightning bolt icon -->
+                                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-xs font-black text-[#F58320] uppercase tracking-[0.2em] mb-1">Conseil
-                                        AirtFast</p>
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <p class="text-xs font-black text-faida-orange uppercase tracking-widest">Prédiction IA</p>
+                                        <span class="px-2 py-0.5 bg-green-100 text-green-600 text-[10px] font-bold rounded-full">NOUVEAU</span>
+                                    </div>
                                     <p class="text-gray-900 font-medium leading-relaxed">
-                                        "La demande <span class="font-bold text-red-600">Airtel</span> à <span
-                                            class="underline decoration-[#F58320]">Majengo</span> augmente le mardi.
-                                        Augmentez votre stock de 15%."
+                                        "La demande <span class="font-bold text-red-600">Airtel</span> à <span class="underline decoration-faida-orange decoration-2">Majengo</span> augmente le mardi. 
+                                        <span class="text-faida-blue font-semibold">Augmentez votre stock de 15%.</span>"
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="group relative z-20 bg-white p-6 rounded-2xl shadow-lg border-l-8 border-[#5E72E4] ml-8 
+                        <!-- AI Card 2 - FIXED: Icon visible -->
+                        <div class="group relative z-20 bg-white p-6 rounded-2xl shadow-xl border-l-4 border-faida-blue ml-8 
                                 transform rotate-2 hover:rotate-0 hover:-translate-y-2 hover:shadow-2xl 
                                 transition-all duration-300 cursor-pointer">
                             <div class="flex items-start gap-4">
-                                <div
-                                    class="flex-shrink-0 w-12 h-12 bg-[#5E72E4]/10 rounded-xl flex items-center justify-center text-[#5E72E4] group-hover:scale-110 transition-transform">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                <div class="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-500 rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform shadow-lg">
+                                    <!-- Warning/Alert icon -->
+                                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-xs font-black text-[#5E72E4] uppercase tracking-[0.2em] mb-1">Alerte
-                                        Rentabilité</p>
+                                    <p class="text-xs font-black text-faida-blue uppercase tracking-widest mb-2">Alerte Zone à Risque</p>
                                     <p class="text-gray-900 font-medium leading-relaxed">
-                                        "Risque de perte détecté : <span class="font-bold text-[#5E72E4]">3
-                                            dettes</span> en retard à <span
-                                            class="underline decoration-[#5E72E4]">Bukavu (Ibanda)</span>."
+                                        "Risque de perte détecté : <span class="font-bold text-red-500">3 dettes en retard</span> à <span class="underline decoration-faida-blue decoration-2">Bukavu (Ibanda)</span>. Action recommandée."
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Card 3 -->
+                        <div class="group relative z-10 bg-white p-6 rounded-2xl shadow-xl border-l-4 border-green-500 
+                                transform -rotate-1 hover:rotate-0 hover:-translate-y-2 hover:shadow-2xl 
+                                transition-all duration-300 cursor-pointer">
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-400 rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-transform shadow-lg">
+                                    <!-- Check circle icon -->
+                                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-black text-green-600 uppercase tracking-widest mb-2">Prédiction de Succès</p>
+                                    <p class="text-gray-900 font-medium leading-relaxed">
+                                        "Probabilité d'atteindre votre target Vodacom ce mois : <span class="font-bold text-green-600">87%</span>. Continuez sur cette lancée !"
                                     </p>
                                 </div>
                             </div>
@@ -412,258 +837,349 @@
                     </div>
                 </div>
 
-                <div class="w-full lg:w-1/2">
-                    <div
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#5E72E4]/10 text-[#5E72E4] text-xs font-bold mb-6 tracking-widest">
+                <!-- Right - Content -->
+                <div class="w-full lg:w-1/2 scroll-animate">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-faida-blue/10 to-faida-orange/10 text-faida-blue text-sm font-bold mb-6">
                         <span class="relative flex h-2 w-2">
-                            <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5E72E4] opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#5E72E4]"></span>
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-faida-orange opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-faida-orange"></span>
                         </span>
                         MACHINE LEARNING & IA
                     </div>
 
-                    <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-                        L'Intelligence Artificielle au service de votre <span class="text-[#F58320]">croissance</span>.
+                    <h2 class="font-display text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+                        L'Intelligence Artificielle au service de votre 
+                        <span class="gradient-text">croissance</span>.
                     </h2>
 
                     <p class="text-lg text-gray-600 mb-10 leading-relaxed">
-                        AirtyFast n'est pas qu'un simple outil de gestion. Grâce au <span
-                            class="font-bold text-gray-900">Machine Learning</span>, l'application analyse vos
-                        performances quotidiennes pour prédire la réussite de votre commerce.
+                        Faida n'est pas qu'un outil de gestion. Grâce au <strong class="text-gray-900">Machine Learning</strong>, 
+                        l'application analyse vos performances pour <strong class="text-faida-blue">prédire la réussite</strong> de votre commerce.
                     </p>
 
-                    <div class="grid gap-6">
+                    <div class="space-y-6">
                         <div class="flex items-start gap-4 group">
-                            <div
-                                class="flex-shrink-0 w-8 h-8 rounded-lg bg-[#F58320]/10 flex items-center justify-center text-[#F58320] font-bold group-hover:bg-[#F58320] group-hover:text-white transition-colors">
-                                1</div>
-                            <p class="text-gray-700 leading-snug pt-1">Recevez des <span
-                                    class="font-semibold text-gray-900">alertes stratégiques</span> pour savoir quoi
-                                faire (ou ne pas faire).</p>
+                            <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-faida-orange/10 flex items-center justify-center text-faida-orange font-bold group-hover:bg-faida-orange group-hover:text-white transition-all">
+                                1
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-1">Alertes Stratégiques</h4>
+                                <p class="text-gray-600 text-sm">Recevez des notifications proactives pour optimiser vos décisions.</p>
+                            </div>
                         </div>
+
                         <div class="flex items-start gap-4 group">
-                            <div
-                                class="flex-shrink-0 w-8 h-8 rounded-lg bg-[#F58320]/10 flex items-center justify-center text-[#F58320] font-bold group-hover:bg-[#F58320] group-hover:text-white transition-colors">
-                                2</div>
-                            <p class="text-gray-700 leading-snug pt-1">Optimisez vos profits en anticipant les besoins
-                                de vos <span class="font-semibold text-gray-900">points de vente</span>.</p>
+                            <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-faida-orange/10 flex items-center justify-center text-faida-orange font-bold group-hover:bg-faida-orange group-hover:text-white transition-all">
+                                2
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-1">Analyse des Zones</h4>
+                                <p class="text-gray-600 text-sm">Identifiez les quartiers à fort potentiel à Goma et Bukavu.</p>
+                            </div>
                         </div>
+
                         <div class="flex items-start gap-4 group">
-                            <div
-                                class="flex-shrink-0 w-8 h-8 rounded-lg bg-[#F58320]/10 flex items-center justify-center text-[#F58320] font-bold group-hover:bg-[#F58320] group-hover:text-white transition-colors">
-                                3</div>
-                            <p class="text-gray-700 leading-snug pt-1">Identifiez les tendances propres à chaque
-                                quartier de <span class="font-semibold text-gray-900">Goma et Bukavu</span>.</p>
+                            <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-faida-orange/10 flex items-center justify-center text-faida-orange font-bold group-hover:bg-faida-orange group-hover:text-white transition-all">
+                                3
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-1">Prédiction des Targets</h4>
+                                <p class="text-gray-600 text-sm">Anticipez vos résultats et ajustez votre stratégie en temps réel.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
+                    <div class="mt-10 p-6 bg-gray-900 rounded-2xl">
+                        <p class="text-gray-400 text-sm mb-2">Fonctionnalité disponible dans</p>
+                        <p class="text-white font-bold text-lg">Plan Premium uniquement</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Pricing section -->
-    <section id="pricing" class="py-24 bg-white">
+    <!-- ============================================ -->
+    <!-- SECTION 5: PRICING - FIXED: Button text visibility on hover -->
+    <!-- ============================================ -->
+    <section id="pricing" class="py-24 bg-white relative">
         <div class="container mx-auto px-6">
-
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6">
-                    Un abonnement adapté à <span class="text-[#5E72E4]">votre taille</span>.
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16 scroll-animate">
+                <span class="inline-block px-4 py-2 rounded-full bg-faida-blue/10 text-faida-blue text-sm font-bold mb-6">
+                    Tarification
+                </span>
+                <h2 class="font-display text-3xl md:text-5xl font-extrabold text-gray-900 mb-6">
+                    Un abonnement adapté à 
+                    <span class="gradient-text">votre taille</span>.
                 </h2>
                 <p class="text-lg text-gray-600">
-                    Pas de frais cachés. Choisissez le plan qui correspond à l'étape actuelle de votre business.
+                    Pas de frais cachés. Commencez gratuitement pendant 14 jours.
                 </p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8 items-start">
-
-                <div
-                    class="p-8 rounded-3xl border border-gray-100 bg-gray-50 hover:shadow-xl transition-all duration-300">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Version Basique</h3>
-                    <p class="text-sm text-gray-500 mb-6">Pour les nouveaux entrepreneurs.</p>
+            <div class="grid md:grid-cols-3 gap-8 items-start max-w-5xl mx-auto">
+                <!-- Basic Plan - FIXED: Button text visible on hover -->
+                <div class="scroll-animate p-8 rounded-3xl border-2 border-gray-100 bg-white hover:border-faida-blue/30 hover:shadow-xl transition-all duration-300">
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Basique</h3>
+                    <p class="text-sm text-gray-500 mb-6">Pour les petits revendeurs.</p>
                     <div class="mb-8">
-                        <span class="text-4xl font-extrabold text-gray-900">10$</span>
+                        <span class="text-5xl font-extrabold text-gray-900">10$</span>
                         <span class="text-gray-500">/mois</span>
                     </div>
                     <ul class="space-y-4 mb-8">
                         <li class="flex items-center gap-3 text-sm text-gray-600">
-                            <span class="text-green-500 font-bold">✓</span> Gestion des stocks simple
+                            <span class="text-green-500 text-lg">✓</span> Gestion des stocks simple
                         </li>
                         <li class="flex items-center gap-3 text-sm text-gray-600">
-                            <span class="text-green-500 font-bold">✓</span> Balance journalière
+                            <span class="text-green-500 text-lg">✓</span> Balance journalière
                         </li>
                         <li class="flex items-center gap-3 text-sm text-gray-600">
-                            <span class="text-green-500 font-bold">✓</span> Jusqu'à 5 vendeurs
+                            <span class="text-green-500 text-lg">✓</span> Jusqu'à 5 vendeurs
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-400">
+                            <span class="text-gray-300 text-lg">✗</span> Gestion des dettes
                         </li>
                     </ul>
-                    <button
-                        class="w-full py-3 px-6 rounded-xl border-2 border-[#5E72E4] text-[#5E72E4] font-bold hover:bg-[#5E72E4] hover:text-white transition-all">
+                    <a href="https://wa.me/243970353087?text=Bonjour%2C%20je%20souhaite%20souscrire%20au%20plan%20Basique%20de%20Faida%20App" class="btn-outline-blue block w-full py-4 px-6 rounded-xl font-bold text-center">
                         Choisir Basique
-                    </button>
+                    </a>
                 </div>
 
-                <div
-                    class="p-8 rounded-3xl bg-gray-900 text-white shadow-2xl shadow-[#5E72E4]/20 transform md:-translate-y-4 relative">
-                    <div
-                        class="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#F58320] text-white text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-full">
+                <!-- Standard Plan - Featured -->
+                <div class="scroll-animate p-8 rounded-3xl bg-gradient-to-b from-gray-900 to-gray-800 text-white shadow-2xl shadow-gray-900/30 transform md:-translate-y-4 relative">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-faida-orange text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg">
                         Recommandé
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Version Standard</h3>
-                    <p class="text-sm text-gray-400 mb-6">Pour les grossistes en pleine croissance.</p>
+                    <h3 class="font-display text-xl font-bold mb-2">Standard</h3>
+                    <p class="text-sm text-gray-400 mb-6">Pour les grossistes en croissance.</p>
                     <div class="mb-8">
-                        <span class="text-4xl font-extrabold">25$</span>
+                        <span class="text-5xl font-extrabold">25$</span>
                         <span class="text-gray-400">/mois</span>
                     </div>
                     <ul class="space-y-4 mb-8">
                         <li class="flex items-center gap-3 text-sm text-gray-300">
-                            <span class="text-[#F58320] font-bold">✓</span> Tout du plan Basique
+                            <span class="text-faida-orange text-lg">✓</span> Tout du plan Basique
                         </li>
                         <li class="flex items-center gap-3 text-sm text-gray-300">
-                            <span class="text-[#F58320] font-bold">✓</span> Gestion complète des dettes
+                            <span class="text-faida-orange text-lg">✓</span> Gestion complète des dettes
                         </li>
                         <li class="flex items-center gap-3 text-sm text-gray-300">
-                            <span class="text-[#F58320] font-bold">✓</span> Jusqu'à 20 vendeurs
+                            <span class="text-faida-orange text-lg">✓</span> Jusqu'à 20 vendeurs
                         </li>
                         <li class="flex items-center gap-3 text-sm text-gray-300">
-                            <span class="text-[#F58320] font-bold">✓</span> Support WhatsApp prioritaire
+                            <span class="text-faida-orange text-lg">✓</span> Support WhatsApp prioritaire
                         </li>
                     </ul>
-                    <button
-                        class="w-full py-4 px-6 rounded-xl bg-[#F58320] text-white font-bold shadow-lg shadow-[#F58320]/30 hover:bg-[#e67610] transition-all">
+                    <a href="https://wa.me/243970353087?text=Bonjour%2C%20je%20souhaite%20commencer%20l%27essai%20du%20plan%20Standard%20de%20Faida%20App" class="block w-full py-4 px-6 rounded-xl bg-faida-orange text-white font-bold shadow-lg shadow-faida-orange/30 hover:shadow-xl hover:scale-[1.02] transition-all text-center">
                         Commencer l'essai
-                    </button>
+                    </a>
                 </div>
 
-                <div
-                    class="p-8 rounded-3xl border border-gray-100 bg-gray-50 hover:shadow-xl transition-all duration-300">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Version Premium</h3>
-                    <p class="text-sm text-gray-500 mb-6">Accès complet & rapports financiers.</p>
+                <!-- Premium Plan - FIXED: Button text visible on hover -->
+                <div class="scroll-animate p-8 rounded-3xl border-2 border-gray-100 bg-white hover:border-faida-orange/30 hover:shadow-xl transition-all duration-300">
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Premium</h3>
+                    <p class="text-sm text-gray-500 mb-6">Accès complet & IA prédictive.</p>
                     <div class="mb-8">
-                        <span class="text-4xl font-extrabold text-gray-900">50$</span>
+                        <span class="text-5xl font-extrabold text-gray-900">50$</span>
                         <span class="text-gray-500">/mois</span>
                     </div>
                     <ul class="space-y-4 mb-8">
                         <li class="flex items-center gap-3 text-sm text-gray-600">
-                            <span class="text-green-500 font-bold">✓</span> Tout du plan Standard
+                            <span class="text-green-500 text-lg">✓</span> Tout du plan Standard
                         </li>
                         <li class="flex items-center gap-3 text-sm text-gray-600">
-                            <span class="text-green-500 font-bold">✓</span> Modules IA & Prédictions
+                            <span class="text-green-500 text-lg">✓</span> <strong>Modules IA & Prédictions</strong>
                         </li>
                         <li class="flex items-center gap-3 text-sm text-gray-600">
-                            <span class="text-green-500 font-bold">✓</span> Vendeurs illimités
+                            <span class="text-green-500 text-lg">✓</span> Vendeurs illimités
                         </li>
                         <li class="flex items-center gap-3 text-sm text-gray-600">
-                            <span class="text-green-500 font-bold">✓</span> Rapports PDF détaillés
+                            <span class="text-green-500 text-lg">✓</span> Rapports PDF détaillés
                         </li>
                     </ul>
-                    <button
-                        class="w-full py-3 px-6 rounded-xl border-2 border-gray-900 text-gray-900 font-bold hover:bg-gray-900 hover:text-white transition-all">
+                    <a href="https://wa.me/243970353087?text=Bonjour%2C%20je%20souhaite%20passer%20au%20plan%20Premium%20de%20Faida%20App" class="btn-outline-dark block w-full py-4 px-6 rounded-xl font-bold text-center">
                         Passer au Premium
-                    </button>
+                    </a>
                 </div>
-
             </div>
 
-            <div class="mt-5 text-center">
-                <p class="text-gray-500 flex items-center justify-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/center" class="h-5 w-5 text-green-500" viewBox="0 0 20 20"
-                        fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clip-rule="evenodd" />
+            <!-- Payment Methods -->
+            <div class="mt-12 text-center scroll-animate">
+                <p class="text-gray-500 flex items-center justify-center gap-3 flex-wrap">
+                    <svg class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>
-                    Paiement sécurisé par Mobile Money (M-Pesa, Airtel Money, Orange Money).
+                    Paiement sécurisé par <strong>M-Pesa</strong>, <strong>Airtel Money</strong>, <strong>Orange Money</strong>
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- Footer section -->
-    <footer class="bg-gray-900 text-white pt-16 pb-8">
+    <!-- ============================================ -->
+    <!-- FOOTER - FIXED: Logo as-is, RDC instead of Nord/Sud-Kivu, X and LinkedIn -->
+    <!-- ============================================ -->
+    <footer class="bg-gray-900 text-white pt-20 pb-8">
         <div class="container mx-auto px-6">
             <div class="grid md:grid-cols-4 gap-12 mb-16">
-
-                <div class="col-span-1 md:col-span-1">
-                    <h3 class="text-2xl font-bold mb-6 italic">
-                        <img src="./imgs/logo-outlined.png" alt="Logo Faida App" class="h-8 inline-block align-middle">
-                    </h3>
+                <!-- Brand - FIXED: Logo without filter -->
+                <div>
+                    <img src="./imgs/logo-outlined.png" alt="Logo Faida App" class="h-10 mb-6">
                     <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                        La solution leader pour la gestion de distribution télécom au Nord et Sud-Kivu. Digitalisez
-                        votre capital, maximisez vos profits.
+                        La solution leader pour la gestion de distribution télécom en RDC. 
+                        Digitalisez votre capital, maximisez vos profits.
                     </p>
+                    <!-- FIXED: X (Twitter) and LinkedIn icons -->
                     <div class="flex gap-4">
-                        <a href="#"
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#5E72E4] transition-colors">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                        <!-- Facebook - Fixed icon -->
+                        <a href="https://wa.me/243970353087" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-faida-blue transition-colors">
+                            <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                             </svg>
                         </a>
-                        <a href="#"
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#5E72E4] transition-colors">
+                        <!-- X (Twitter) -->
+                        <a href="https://wa.me/243970353087" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-faida-blue transition-colors">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                        <!-- LinkedIn -->
+                        <a href="https://wa.me/243970353087" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-faida-blue transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                             </svg>
                         </a>
                     </div>
                 </div>
 
+                <!-- Navigation - All links go to WhatsApp -->
                 <div>
                     <h4 class="font-bold mb-6">Navigation</h4>
                     <ul class="space-y-4 text-sm text-gray-400">
-                        <li><a href="#constat" class="hover:text-white transition-colors">Avantages</a></li>
+                        <li><a href="#probleme" class="hover:text-white transition-colors">Avantages</a></li>
                         <li><a href="#features" class="hover:text-white transition-colors">Fonctionnalités</a></li>
                         <li><a href="#innovation" class="hover:text-white transition-colors">Innovation IA</a></li>
                         <li><a href="#pricing" class="hover:text-white transition-colors">Tarifs</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Devenir Agent</a></li>
+                        <li><a href="https://wa.me/243979322112?text=Bonjour%2C%20je%20souhaite%20devenir%20agent%20Faida%20App" class="hover:text-white transition-colors">Devenir Agent</a></li>
                     </ul>
                 </div>
 
+                <!-- Offices -->
                 <div>
                     <h4 class="font-bold mb-6">Nos Bureaux</h4>
                     <ul class="space-y-4 text-sm text-gray-400">
                         <li class="flex items-start gap-3">
-                            <span class="text-[#F58320]">📍</span>
+                            <span class="text-faida-orange">📍</span>
                             Goma: Av. Les Volcans, Goma, RDC
                         </li>
                         <li class="flex items-start gap-3">
-                            <span class="text-[#F58320]">📍</span>
+                            <span class="text-faida-orange">📍</span>
                             Bukavu: Ibanda, Bukavu, RDC
                         </li>
                         <li class="flex items-start gap-3 text-white font-bold">
-                            <span class="text-[#F58320]">📞</span>
-                            +243 979 322 112
+                            <span class="text-faida-orange">📞</span>
+                            +243 970 353 087
                         </li>
                     </ul>
                 </div>
 
-                <div class="bg-white/5 p-6 rounded-2xl">
-                    <h4 class="font-bold mb-4 text-[#F58320]">Uko tayari?</h4>
+                <!-- CTA Box -->
+                <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                    <h4 class="font-bold mb-2 text-faida-orange">Uko tayari?</h4>
                     <p class="text-xs text-gray-400 mb-6">
                         "Anza leo na Faida app, usipoteze tena hata franka moja ya mtaji wako."
                     </p>
-                    <a href="https://wa.me/243979322112"
-                        class="block w-full py-3 bg-[#5E72E4] text-white text-center rounded-xl text-sm font-bold hover:bg-blue-600 transition-colors">
+                    <a href="https://wa.me/243970353087?text=Bonjour%2C%20je%20souhaite%20appeler%20l%27équipe%20Faida%20App" class="block w-full py-3 bg-faida-blue text-white text-center rounded-xl text-sm font-bold hover:bg-blue-600 transition-colors">
                         Tupigie sasa hivi
                     </a>
                 </div>
             </div>
 
-            <div
-                class="pt-8 border-t border-white/10 flex flex-col md:row items-center justify-between gap-4 text-xs text-gray-500">
+            <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
                 <p>© 2026 Faida App. Tous droits réservés.</p>
                 <div class="flex gap-6">
-                    <a href="#" class="hover:text-white">Confidentialité</a>
-                    <a href="#" class="hover:text-white">Conditions d'utilisation</a>
+                    <a href="https://wa.me/243970353087" class="hover:text-white transition-colors">Confidentialité</a>
+                    <a href="https://wa.me/243970353087" class="hover:text-white transition-colors">Conditions d'utilisation</a>
                 </div>
             </div>
         </div>
     </footer>
 
+    <!-- ============================================ -->
+    <!-- STICKY WHATSAPP BUTTON -->
+    <!-- ============================================ -->
+    <div class="whatsapp-btn" id="whatsappWidget">
+        <!-- Pulse ring animation -->
+        <div class="pulse-ring"></div>
+        
+        <!-- Main button -->
+        <div class="main-btn" id="whatsappToggle">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
 
+        <!-- Popup Menu -->
+        <div class="whatsapp-popup" id="whatsappPopup">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-display font-bold text-gray-900">Besoin d'aide ?</h4>
+                    <button id="closePopup" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <p class="text-sm text-gray-600 mb-6">Choisissez une action pour commencer avec Faida App.</p>
+                
+                <div class="space-y-3">
+                    <a href="https://wa.me/243970353087?text=Bonjour%2C%20je%20souhaite%20commencer%20mon%20essai%20gratuit%20Faida%20App" 
+                       class="flex items-center gap-3 p-3 rounded-xl bg-green-50 hover:bg-green-100 transition-colors group">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-900 text-sm">Commencer l'essai gratuit</p>
+                            <p class="text-xs text-gray-500">14 jours sans engagement</p>
+                        </div>
+                    </a>
+
+                    <a href="https://wa.me/243970353087?text=Bonjour%2C%20je%20souhaite%20une%20démonstration%20de%20Faida%20App" 
+                       class="flex items-center gap-3 p-3 rounded-xl bg-faida-blue/5 hover:bg-faida-blue/10 transition-colors group">
+                        <div class="w-10 h-10 bg-faida-blue rounded-full flex items-center justify-center text-white">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-900 text-sm">Demander une démo</p>
+                            <p class="text-xs text-gray-500">Appel vidéo personnalisé</p>
+                        </div>
+                    </a>
+
+                    <a href="https://wa.me/243970353087?text=Bonjour%2C%20j%27ai%20des%20questions%20sur%20Faida%20App" 
+                       class="flex items-center gap-3 p-3 rounded-xl bg-faida-orange/5 hover:bg-faida-orange/10 transition-colors group">
+                        <div class="w-10 h-10 bg-faida-orange rounded-full flex items-center justify-center text-white">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-900 text-sm">Poser une question</p>
+                            <p class="text-xs text-gray-500">Réponse rapide garantie</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================ -->
     <script>
+        // Mobile menu toggle
         const btn = document.getElementById('mobile-menu-button');
         const menu = document.getElementById('mobile-menu');
         const burgerIcon = document.getElementById('burger-icon');
@@ -676,7 +1192,6 @@
             closeIcon.classList.toggle('hidden');
         });
 
-        // Fermer le menu quand on clique sur un lien
         links.forEach(link => {
             link.addEventListener('click', () => {
                 menu.classList.add('hidden');
@@ -684,8 +1199,65 @@
                 closeIcon.classList.add('hidden');
             });
         });
+
+        // WhatsApp popup toggle
+        const whatsappToggle = document.getElementById('whatsappToggle');
+        const whatsappPopup = document.getElementById('whatsappPopup');
+        const closePopup = document.getElementById('closePopup');
+
+        whatsappToggle.addEventListener('click', () => {
+            whatsappPopup.classList.toggle('active');
+        });
+
+        closePopup.addEventListener('click', () => {
+            whatsappPopup.classList.remove('active');
+        });
+
+        // Close popup when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!document.getElementById('whatsappWidget').contains(e.target)) {
+                whatsappPopup.classList.remove('active');
+            }
+        });
+
+        // Scroll animations
+        const scrollAnimateElements = document.querySelectorAll('.scroll-animate');
+        
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        scrollAnimateElements.forEach(el => observer.observe(el));
+
+        // Navbar background on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
+        });
+
+        // Auto-show WhatsApp popup after 30 seconds
+        setTimeout(() => {
+            if (!whatsappPopup.classList.contains('active')) {
+                whatsappPopup.classList.add('active');
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    whatsappPopup.classList.remove('active');
+                }, 5000);
+            }
+        }, 30000);
     </script>
-
 </body>
-
 </html>
